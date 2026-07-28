@@ -101,10 +101,9 @@ public class GridManager : MonoBehaviour
 
     private void SpawmPlayer()
     {
-        Instantiate(
-            _playerPrefab, 
-            new Vector3(_playerSpawn.x,0,_playerSpawn.y), 
-            Quaternion.identity);
+        GameObject player = Instantiate(_playerPrefab);
+        PlayerController controller = player.GetComponent<PlayerController>();
+        controller.Initialize(_playerSpawn,this);
     }
 
     private void SpawnEnemy()
