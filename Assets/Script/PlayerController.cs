@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour
         if (cell.Type == CellType.Wall)
         {
             Debug.Log("Wall");
+            return;
         }
         Debug.Log("nextpos");
         _gridPosition = nextPos;
