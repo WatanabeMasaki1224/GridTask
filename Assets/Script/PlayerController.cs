@@ -5,18 +5,29 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private int _attack = 3;
     [SerializeField] private int _HP = 10;
-    [SerializeField] private GridManager _gridManager;
+    private GridManager _gridManager;
+    private TurnManager _turnManager;
     private Vector2Int _gridPosition;
 
-    public void Initialize(Vector2Int startPos, GridManager gridManager)
+    public void Initialize(Vector2Int startPos)
     {
-        _gridManager = gridManager;
         _gridPosition = startPos;
         transform.position = new Vector3(startPos.x, 0, startPos.y);
     }
 
+    private void Start()
+    {
+        _gridManager = FindFirstObjectByType<GridManager>();
+        _turnManager = FindFirstObjectByType<TurnManager>();
+    }
+
     private void Update()
     {
+        if (!_turnManager.PlayerTurn())
+        {
+            return;
+        }
+
         Vector2Int move = Vector2Int.zero;
 
         if (Keyboard.current.wKey.wasPressedThisFrame)
@@ -53,5 +64,17 @@ public class PlayerController : MonoBehaviour
         Debug.Log("nextpos");
         _gridPosition = nextPos;
         transform.position = new Vector3(_gridPosition.x,0,_gridPosition.y);
+
+        _turnManager.ChangeTurn();
+    }
+
+    private void  Look()
+    {
+
+    }
+
+    private void Attack()
+    {
+
     }
 }

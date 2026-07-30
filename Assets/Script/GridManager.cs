@@ -17,7 +17,7 @@ public class GridManager : MonoBehaviour
     private string[] _mapData =
     {
         "#####",
-        "#..."
+        "#...#"
     };
 
     private Vector2Int _playerSpawn;
@@ -103,17 +103,21 @@ public class GridManager : MonoBehaviour
     {
         GameObject player = Instantiate(_playerPrefab);
         PlayerController controller = player.GetComponent<PlayerController>();
-        controller.Initialize(_playerSpawn,this);
+        controller.Initialize(_playerSpawn);
     }
 
     private void SpawnEnemy()
     {
+        EnemyManager manager = FindFirstObjectByType<EnemyManager>();
         foreach(Vector2Int pos in _enemySpawns)
         {
-            Instantiate(
+            GameObject enemy =Instantiate(
                 _enemyPregfab,
                 new Vector3(pos.x,0,pos.y),
                 Quaternion.identity);
+
+            EnemyController controller = enemy.GetComponent<EnemyController>(); controller.Initialize(pos);
+            manager.AddEnemy(controller);
         }
     }
 
