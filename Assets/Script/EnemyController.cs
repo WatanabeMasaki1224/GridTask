@@ -1,9 +1,13 @@
 using UnityEngine;
 
+
 public class EnemyController : MonoBehaviour
 {
+    [SerializeField] private int _HP = 10;
+    [SerializeField] private int _attack = 5;
     private GridManager _gridManager;
     private Vector2Int _gridPosition;
+    private int _currentHP;
 
     public void Initialize(Vector2Int startPos)
     {
@@ -14,6 +18,7 @@ public class EnemyController : MonoBehaviour
     private void Start()
     {
         _gridManager = FindFirstObjectByType<GridManager>();
+        _currentHP = _HP;
     }
 
     public void EnemyTurn()
@@ -33,17 +38,35 @@ public class EnemyController : MonoBehaviour
     private void Move(Vector2Int direction)
     {
         Vector2Int nextPos = _gridPosition + direction;
-        Cell cell = _gridManager.GetCell(nextPos.x, nextPos.y);
+        Cell nextCell = _gridManager.GetCell(nextPos.x, nextPos.y);
 
-        if (cell == null)
+        if (nextCell == null)
         {
             return;
         }
-        if (cell.Type == CellType.Wall)
+        if (nextCell.Type == CellType.Wall)
         {
             return;
         }
+
+        // ç°Ç¢ÇÈèÍèäÇ©ÇÁìGÇè¡Ç∑
+        Cell currentCell = _gridManager.GetCell(
+            _gridPosition.x,
+            _gridPosition.y
+        );
+
+        currentCell.Occupant = null;
+
+
+        // à⁄ìÆêÊÇ…ìGÇìoò^
+        nextCell.Occupant = this;
         _gridPosition = nextPos;
         transform.position = new Vector3(_gridPosition.x, 0, _gridPosition.y);
+    }
+
+    public void Damage(int damage)
+    {
+        _currentHP -= damage;
+        Debug.Log(_currentHP);
     }
 }

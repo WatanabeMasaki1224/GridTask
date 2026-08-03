@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     private GridManager _gridManager;
     private TurnManager _turnManager;
     private Vector2Int _gridPosition;
+    private Vector2Int _lookDirection = Vector2Int.down;
 
     public void Initialize(Vector2Int startPos)
     {
@@ -43,6 +44,11 @@ public class PlayerController : MonoBehaviour
         {
             Move(move);
         }
+
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            Attack();
+        }
     }
 
     private void Move(Vector2Int direction)
@@ -63,6 +69,7 @@ public class PlayerController : MonoBehaviour
         }
         Debug.Log("nextpos");
         _gridPosition = nextPos;
+        _lookDirection = direction;
         transform.position = new Vector3(_gridPosition.x,0,_gridPosition.y);
 
         _turnManager.ChangeTurn();
@@ -76,5 +83,14 @@ public class PlayerController : MonoBehaviour
     private void Attack()
     {
 
+        Vector2Int targetPos = _gridPosition + _lookDirection;
+        Cell targetCell = _gridManager.GetCell(targetPos.x, targetPos.y);
+
+        if (targetCell != null && targetCell.Occupant != null)
+        {
+            targetCell.Occupant.Damage(_attack);
+        }
+
+        _turnManager.ChangeTurn();
     }
 }

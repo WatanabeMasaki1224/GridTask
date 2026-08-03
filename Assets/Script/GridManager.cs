@@ -116,7 +116,10 @@ public class GridManager : MonoBehaviour
                 new Vector3(pos.x,0,pos.y),
                 Quaternion.identity);
 
-            EnemyController controller = enemy.GetComponent<EnemyController>(); controller.Initialize(pos);
+            EnemyController controller = enemy.GetComponent<EnemyController>(); 
+            controller.Initialize(pos);
+            Cell cell = GetCell(pos.x, pos.y);
+            cell.Occupant = controller;
             manager.AddEnemy(controller);
         }
     }
