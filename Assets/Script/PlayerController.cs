@@ -70,15 +70,19 @@ public class PlayerController : MonoBehaviour
         }
         Debug.Log("nextpos");
         _gridPosition = nextPos;
-        _lookDirection = direction;
+        Look(direction);
         transform.position = new Vector3(_gridPosition.x,0,_gridPosition.y);
 
         _turnManager.ChangeTurn();
     }
 
-    private void  Look()
+    private void  Look(Vector2Int direction)
     {
+        _lookDirection = direction;
 
+        transform.rotation = Quaternion.LookRotation(
+            new Vector3(direction.x, 0, direction.y)
+        );
     }
 
     private void Attack()
@@ -115,10 +119,14 @@ public class PlayerController : MonoBehaviour
         {
             EnemyController target =
                 targets[Random.Range(0, targets.Count)];
-
-            // å©ÇΩñ⁄ÇÃå¸Ç´Ç‡çXêVÇ∑ÇÈÇ»ÇÁÇ±Ç±Ç≈
-            _lookDirection = target.GridPosition - _gridPosition;
-
+            Look(target.GridPosition - _gridPosition);
+            transform.rotation = Quaternion.LookRotation(
+                new Vector3(
+                    _lookDirection.x,
+                    0,
+                    _lookDirection.y
+                    )
+                );
             target.Damage(_attack);
         }
 
