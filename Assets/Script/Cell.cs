@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Cell 
 {
-    public Vector2Int Position;
-    public CellType Type;
-    public EnemyController Occupant;
+    public Vector2Int Position { get; private set; }
+    public CellType Type { get; private set; }
+    public EnemyController Enemy { get; set; }
 
     public Cell(Vector2Int position, CellType type)
     {

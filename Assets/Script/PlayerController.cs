@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -82,13 +83,43 @@ public class PlayerController : MonoBehaviour
 
     private void Attack()
     {
+        Vector2Int[] directions = {
+        Vector2Int.up,
+        Vector2Int.down,
+        Vector2Int.left,
+        Vector2Int.right,
+        new Vector2Int(1, 1),
+        new Vector2Int(1, -1),
+        new Vector2Int(-1, 1),
+        new Vector2Int(-1, -1)
+    };
 
-        Vector2Int targetPos = _gridPosition + _lookDirection;
-        Cell targetCell = _gridManager.GetCell(targetPos.x, targetPos.y);
+        List<EnemyController> targets = new();
 
-        if (targetCell != null && targetCell.Occupant != null)
+        foreach (Vector2Int direction in directions)
         {
-            targetCell.Occupant.Damage(_attack);
+            Vector2Int targetPos = _gridPosition + direction;
+
+            Cell cell = _gridManager.GetCell(targetPos.x, targetPos.y);
+
+            if (cell == null)
+                continue;
+
+            if (cell.Enemy != null)
+            {
+                targets.Add(cell.Enemy);
+            }
+        }
+
+        if (targets.Count > 0)
+        {
+            EnemyController target =
+                targets[Random.Range(0, targets.Count)];
+
+            // å©ÇΩñ⁄ÇÃå¸Ç´Ç‡çXêVÇ∑ÇÈÇ»ÇÁÇ±Ç±Ç≈
+            _lookDirection = target.GridPosition - _gridPosition;
+
+            target.Damage(_attack);
         }
 
         _turnManager.ChangeTurn();

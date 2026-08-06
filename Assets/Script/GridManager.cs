@@ -119,7 +119,7 @@ public class GridManager : MonoBehaviour
             EnemyController controller = enemy.GetComponent<EnemyController>(); 
             controller.Initialize(pos);
             Cell cell = GetCell(pos.x, pos.y);
-            cell.Occupant = controller;
+            cell.Enemy = controller;
             manager.AddEnemy(controller);
         }
     }

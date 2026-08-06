@@ -8,6 +8,7 @@ public class EnemyController : MonoBehaviour
     private GridManager _gridManager;
     private Vector2Int _gridPosition;
     private int _currentHP;
+    public Vector2Int GridPosition => _gridPosition;
 
     public void Initialize(Vector2Int startPos)
     {
@@ -55,11 +56,11 @@ public class EnemyController : MonoBehaviour
             _gridPosition.y
         );
 
-        currentCell.Occupant = null;
+        currentCell.Enemy = null;
 
 
         // à⁄ìÆêÊÇ…ìGÇìoò^
-        nextCell.Occupant = this;
+        nextCell.Enemy = this;
         _gridPosition = nextPos;
         transform.position = new Vector3(_gridPosition.x, 0, _gridPosition.y);
     }
