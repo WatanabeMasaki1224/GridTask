@@ -69,5 +69,22 @@ public class EnemyController : MonoBehaviour
     {
         _currentHP -= damage;
         Debug.Log(_currentHP);
+
+        if (_currentHP <= 0)
+        {
+            Dead();
+        }
+    }
+
+    private void Dead()
+    {
+        Cell cell = _gridManager.GetCell(
+            _gridPosition.x,
+            _gridPosition.y
+        );
+
+        cell.Enemy = null;
+
+        Destroy(gameObject);
     }
 }
