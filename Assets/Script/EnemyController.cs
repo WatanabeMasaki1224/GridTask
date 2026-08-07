@@ -8,6 +8,8 @@ public class EnemyController : MonoBehaviour
     private GridManager _gridManager;
     private Vector2Int _gridPosition;
     private int _currentHP;
+    private PlayerController _player;
+    [SerializeField] private int _searchRange = 10;
     public Vector2Int GridPosition => _gridPosition;
 
     public void Initialize(Vector2Int startPos)
@@ -20,20 +22,55 @@ public class EnemyController : MonoBehaviour
     {
         _gridManager = FindFirstObjectByType<GridManager>();
         _currentHP = _HP;
+        _player = FindFirstObjectByType<PlayerController>();
     }
 
     public void EnemyTurn()
     {
-        Vector2Int[] direction =
-        {
-            Vector2Int.up,
-            Vector2Int.down,
-            Vector2Int.left,
-            Vector2Int.right,
-        };
+        int distance =
+        Mathf.Abs(_player.GridPosition.x - _gridPosition.x) +
+        Mathf.Abs(_player.GridPosition.y - _gridPosition.y);
 
-        Vector2Int move = direction[Random.Range(0, direction.Length)];
-        Move(move);
+        if (distance <= _searchRange)
+        {
+            Chase();
+        }
+        else
+        {
+            RandomMove();
+        }
+    }
+
+    private void Chase()
+    {
+        Vector2Int direction = Vector2Int.zero;
+
+        int dx = _player.GridPosition.x - _gridPosition.x;
+        int dy = _player.GridPosition.y - _gridPosition.y;
+
+        if (Mathf.Abs(dx) > Mathf.Abs(dy))
+        {
+            direction = dx > 0 ? Vector2Int.right : Vector2Int.left;
+        }
+        else
+        {
+            direction = dy > 0 ? Vector2Int.up : Vector2Int.down;
+        }
+
+        Move(direction);
+    }
+
+    private void RandomMove()
+    {
+        Vector2Int[] directions =
+        {
+        Vector2Int.up,
+        Vector2Int.down,
+        Vector2Int.left,
+        Vector2Int.right
+    };
+
+        Move(directions[Random.Range(0, directions.Length)]);
     }
 
     private void Move(Vector2Int direction)

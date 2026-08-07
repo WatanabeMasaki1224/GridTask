@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private TurnManager _turnManager;
     private Vector2Int _gridPosition;
     private Vector2Int _lookDirection = Vector2Int.down;
+    public Vector2Int GridPosition => _gridPosition;
 
     public void Initialize(Vector2Int startPos)
     {
