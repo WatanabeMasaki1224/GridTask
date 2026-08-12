@@ -1,3 +1,4 @@
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public enum TurnState
@@ -10,11 +11,14 @@ public class TurnManager : MonoBehaviour
 {
     public EnemyManager EnemyManager;
     private bool _gameEnded = false;
+    [SerializeField] private GameUI _gameUI;
     public TurnState CurrentTurn {  get; private set; }
+    public int TurnCount { get; private set; } = 1;
 
     private void Start()
     {
         CurrentTurn = TurnState.Player;
+        _gameUI.SetTurn(TurnCount);
     }
 
     public bool PlayerTurn()
@@ -39,7 +43,8 @@ public class TurnManager : MonoBehaviour
             CurrentTurn = TurnState.Enemy;
             EnemyManager.EnemyTurn();
             CurrentTurn = TurnState.Player;
-
+            TurnCount++;
+            _gameUI.SetTurn(TurnCount);
         }
         else
         {

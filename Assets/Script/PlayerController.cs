@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private GridManager _gridManager;
     private TurnManager _turnManager;
     private GameManager _gameManager;
+    private GameUI _gameUI;
     private Vector2Int _gridPosition;
     private Vector2Int _lookDirection = Vector2Int.down;
     private int _currentHP;
@@ -19,7 +20,6 @@ public class PlayerController : MonoBehaviour
     {
         _gridPosition = startPos;
         transform.position = new Vector3(startPos.x, 0, startPos.y);
-        _currentHP = _HP;
     }
 
     private void Start()
@@ -27,6 +27,9 @@ public class PlayerController : MonoBehaviour
         _gridManager = FindFirstObjectByType<GridManager>();
         _turnManager = FindFirstObjectByType<TurnManager>();
         _gameManager = FindFirstObjectByType<GameManager>();
+        _gameUI = FindFirstObjectByType<GameUI>();
+        _currentHP = _HP;
+        _gameUI.SetHP(_currentHP, _HP);
     }
 
     private void Update()
@@ -151,8 +154,8 @@ public class PlayerController : MonoBehaviour
     public void Damage(int damage)
     {
         _currentHP -= damage;
-        Debug.Log(_currentHP);
-        if ( _currentHP <= 0 )
+        _gameUI.SetHP(_currentHP ,_HP);
+        if (_currentHP <= 0 )
         {
             Die();
         }
