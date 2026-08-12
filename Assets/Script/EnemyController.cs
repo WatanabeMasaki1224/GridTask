@@ -144,7 +144,6 @@ public class EnemyController : MonoBehaviour
         );
 
         cell.Enemy = null;
-
         Destroy(gameObject);
     }
 }

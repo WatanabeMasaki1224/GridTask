@@ -9,6 +9,7 @@ public enum TurnState
 public class TurnManager : MonoBehaviour
 {
     public EnemyManager EnemyManager;
+    private bool _gameEnded = false;
     public TurnState CurrentTurn {  get; private set; }
 
     private void Start()
@@ -18,17 +19,22 @@ public class TurnManager : MonoBehaviour
 
     public bool PlayerTurn()
     {
-        return CurrentTurn == TurnState.Player;
+        return !_gameEnded && CurrentTurn == TurnState.Player;
     }
 
     public bool EnemyTurn()
     {
-        return CurrentTurn == TurnState.Enemy;
+        return !_gameEnded && CurrentTurn == TurnState.Enemy;
     }
 
     public void ChangeTurn()
     {
-        if(CurrentTurn == TurnState.Player)
+        if (_gameEnded)
+        {
+            return;
+        }
+
+        if (CurrentTurn == TurnState.Player)
         {
             CurrentTurn = TurnState.Enemy;
             EnemyManager.EnemyTurn();
@@ -39,5 +45,10 @@ public class TurnManager : MonoBehaviour
         {
             CurrentTurn = TurnState.Player;
         }
+    }
+
+    public void GameEnd()
+    {
+        _gameEnded = true;
     }
 }

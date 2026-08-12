@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int _HP = 10;
     private GridManager _gridManager;
     private TurnManager _turnManager;
+    private GameManager _gameManager;
     private Vector2Int _gridPosition;
     private Vector2Int _lookDirection = Vector2Int.down;
     private int _currentHP;
@@ -25,6 +26,7 @@ public class PlayerController : MonoBehaviour
     {
         _gridManager = FindFirstObjectByType<GridManager>();
         _turnManager = FindFirstObjectByType<TurnManager>();
+        _gameManager = FindFirstObjectByType<GameManager>();
     }
 
     private void Update()
@@ -78,6 +80,13 @@ public class PlayerController : MonoBehaviour
         _gridPosition = nextPos;
         Look(direction);
         transform.position = new Vector3(_gridPosition.x,1.0f,_gridPosition.y);
+
+        if (cell.Type == CellType.Goal)
+        {
+            _turnManager.GameEnd();
+            _gameManager.GameClear();
+            return;
+        }
 
         _turnManager.ChangeTurn();
     }
