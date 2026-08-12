@@ -7,6 +7,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private int _attack = 5;
     private GridManager _gridManager;
     private Vector2Int _gridPosition;
+    private TurnManager _turnManager;
     private int _currentHP;
     private PlayerController _player;
     [SerializeField] private int _searchRange = 10;
@@ -23,6 +24,7 @@ public class EnemyController : MonoBehaviour
         _gridManager = FindFirstObjectByType<GridManager>();
         _currentHP = _HP;
         _player = FindFirstObjectByType<PlayerController>();
+        _turnManager = FindFirstObjectByType<TurnManager>();
     }
 
     public void EnemyTurn()
@@ -30,6 +32,11 @@ public class EnemyController : MonoBehaviour
         int distance =
         Mathf.Abs(_player.GridPosition.x - _gridPosition.x) +
         Mathf.Abs(_player.GridPosition.y - _gridPosition.y);
+
+        if (distance <= 1)
+        {
+            Attack();
+        }
 
         if (distance <= _searchRange)
         {
@@ -87,6 +94,16 @@ public class EnemyController : MonoBehaviour
             return;
         }
 
+        if(nextCell.Enemy != null)
+        {
+            return ;
+        }
+
+        if (nextPos == _player.GridPosition)
+        {
+            return;
+        }
+
         // ¡‚¢‚éêŠ‚©‚ç“G‚ðÁ‚·
         Cell currentCell = _gridManager.GetCell(
             _gridPosition.x,
@@ -100,6 +117,12 @@ public class EnemyController : MonoBehaviour
         nextCell.Enemy = this;
         _gridPosition = nextPos;
         transform.position = new Vector3(_gridPosition.x, 0, _gridPosition.y);
+    }
+
+    private void Attack()
+    {
+        _player.Damage(_attack);
+        _turnManager.ChangeTurn();
     }
 
     public void Damage(int damage)

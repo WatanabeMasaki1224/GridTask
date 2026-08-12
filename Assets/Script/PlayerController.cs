@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,12 +11,14 @@ public class PlayerController : MonoBehaviour
     private TurnManager _turnManager;
     private Vector2Int _gridPosition;
     private Vector2Int _lookDirection = Vector2Int.down;
+    private int _currentHP;
     public Vector2Int GridPosition => _gridPosition;
 
     public void Initialize(Vector2Int startPos)
     {
         _gridPosition = startPos;
         transform.position = new Vector3(startPos.x, 0, startPos.y);
+        _currentHP = _HP;
     }
 
     private void Start()
@@ -55,24 +58,26 @@ public class PlayerController : MonoBehaviour
 
     private void Move(Vector2Int direction)
     {
-        Debug.Log("Move");
         Vector2Int nextPos = _gridPosition + direction;
         Cell cell = _gridManager.GetCell(nextPos.x, nextPos.y);
 
         if(cell == null)
         {
-            Debug.Log("null");
             return;     
         }
         if (cell.Type == CellType.Wall)
         {
-            Debug.Log("Wall");
             return;
         }
-        Debug.Log("nextpos");
+
+        if(cell.Enemy != null)
+        {
+            return;
+        }
+
         _gridPosition = nextPos;
         Look(direction);
-        transform.position = new Vector3(_gridPosition.x,0,_gridPosition.y);
+        transform.position = new Vector3(_gridPosition.x,1.0f,_gridPosition.y);
 
         _turnManager.ChangeTurn();
     }
@@ -132,5 +137,20 @@ public class PlayerController : MonoBehaviour
         }
 
         _turnManager.ChangeTurn();
+    }
+
+    public void Damage(int damage)
+    {
+        _currentHP -= damage;
+        Debug.Log(_currentHP);
+        if ( _currentHP <= 0 )
+        {
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        Destroy(gameObject);
     }
 }
