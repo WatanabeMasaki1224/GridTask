@@ -14,6 +14,7 @@ public class EnemyManager : MonoBehaviour
 
     public void EnemyTurn()
     {
+        _enemies.RemoveAll(enemy => enemy == null);
         foreach (EnemyController enemy in _enemies)
         {
             enemy.EnemyTurn();

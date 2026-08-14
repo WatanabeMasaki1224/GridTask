@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 
 
@@ -7,6 +9,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private int _attack = 5;
     private GridManager _gridManager;
     private Vector2Int _gridPosition;
+    private PathFinder _pathFinder;
     private TurnManager _turnManager;
     private int _currentHP;
     private PlayerController _player;
@@ -25,6 +28,7 @@ public class EnemyController : MonoBehaviour
         _currentHP = _HP;
         _player = FindFirstObjectByType<PlayerController>();
         _turnManager = FindFirstObjectByType<TurnManager>();
+        _pathFinder = new PathFinder(_gridManager);
     }
 
     public void EnemyTurn()
@@ -36,36 +40,32 @@ public class EnemyController : MonoBehaviour
         if (distance <= 1)
         {
             Attack();
+            return;
         }
 
         if (distance <= _searchRange)
         {
-            Chase();
+            List<Vector2Int> path =
+                _pathFinder.FindPath(
+                    _gridPosition,
+                    _player.GridPosition
+                );
+
+            if (path != null && path.Count > 0)
+            {
+                Vector2Int nextPos = path[0];
+                Vector2Int direction = nextPos - _gridPosition;
+                Move(direction);
+            }
+            else
+            {
+                RandomMove();
+            }
+            return;
         }
-        else
-        {
             RandomMove();
-        }
     }
 
-    private void Chase()
-    {
-        Vector2Int direction = Vector2Int.zero;
-
-        int dx = _player.GridPosition.x - _gridPosition.x;
-        int dy = _player.GridPosition.y - _gridPosition.y;
-
-        if (Mathf.Abs(dx) > Mathf.Abs(dy))
-        {
-            direction = dx > 0 ? Vector2Int.right : Vector2Int.left;
-        }
-        else
-        {
-            direction = dy > 0 ? Vector2Int.up : Vector2Int.down;
-        }
-
-        Move(direction);
-    }
 
     private void RandomMove()
     {
@@ -122,7 +122,6 @@ public class EnemyController : MonoBehaviour
     private void Attack()
     {
         _player.Damage(_attack);
-        _turnManager.ChangeTurn();
     }
 
     public void Damage(int damage)
