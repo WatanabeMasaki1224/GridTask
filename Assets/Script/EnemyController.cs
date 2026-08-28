@@ -13,6 +13,7 @@ public class EnemyController : MonoBehaviour
     private TurnManager _turnManager;
     private int _currentHP;
     private PlayerController _player;
+    private EnemyManager _enemyManager;
     [SerializeField] private int _searchRange = 10;
     public Vector2Int GridPosition => _gridPosition;
 
@@ -29,6 +30,7 @@ public class EnemyController : MonoBehaviour
         _player = FindFirstObjectByType<PlayerController>();
         _turnManager = FindFirstObjectByType<TurnManager>();
         _pathFinder = new PathFinder(_gridManager);
+        _enemyManager = FindFirstObjectByType<EnemyManager>();
     }
 
     public void EnemyTurn()
@@ -37,7 +39,10 @@ public class EnemyController : MonoBehaviour
         Mathf.Abs(_player.GridPosition.x - _gridPosition.x) +
         Mathf.Abs(_player.GridPosition.y - _gridPosition.y);
 
-        if (distance <= 1)
+        int dx = Mathf.Abs(_player.GridPosition.x - _gridPosition.x);
+        int dy = Mathf.Abs(_player.GridPosition.y - _gridPosition.y);
+
+        if (dx  <= 1  && dy <= 1)
         {
             Attack();
             return;
@@ -143,6 +148,7 @@ public class EnemyController : MonoBehaviour
         );
 
         cell.Enemy = null;
+        _enemyManager.RemoveEnemy(this);
         Destroy(gameObject);
     }
 }

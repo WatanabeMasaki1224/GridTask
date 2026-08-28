@@ -20,4 +20,9 @@ public class EnemyManager : MonoBehaviour
             enemy.EnemyTurn();
         }
     }
+
+    public void RemoveEnemy(EnemyController enemy)
+    {
+        _enemies.Remove(enemy);
+    }
 }
