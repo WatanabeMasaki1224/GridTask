@@ -1,7 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerController : MonoBehaviour
 {
@@ -133,21 +136,41 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        EnemyController target = null;
+
         if (targets.Count > 0)
         {
-            EnemyController target =
-                targets[Random.Range(0, targets.Count)];
+            target = targets[Random.Range(0, targets.Count)];
             Look(target.GridPosition - _gridPosition);
-            transform.rotation = Quaternion.LookRotation(
-                new Vector3(
-                    _lookDirection.x,
-                    0,
-                    _lookDirection.y
-                    )
-                );
-            target.Damage(_attack);
         }
 
+        StartCoroutine(AttackAnimation(target));
+    }
+
+    private IEnumerator AttackAnimation(EnemyController target)
+    {
+        Vector3 startPosition = transform.position;
+        Vector3 direction = transform.forward;
+        Vector3 attackPosition =startPosition + direction * 0.3f;
+
+        // 前に出る
+        yield return transform
+            .DOMove(attackPosition, 0.1f)
+            .WaitForCompletion();
+
+        // ダメージ
+        if (target != null)
+        {
+            target.Damage(_attack);
+        }
+      
+
+        // 元の位置に戻る
+        yield return transform
+            .DOMove(startPosition, 0.1f)
+            .WaitForCompletion();
+
+        // アニメーションが終わってから次のターン
         _turnManager.ChangeTurn();
     }
 

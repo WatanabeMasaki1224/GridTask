@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -126,7 +128,39 @@ public class EnemyController : MonoBehaviour
 
     private void Attack()
     {
+        StartCoroutine(AttackAnimation());
+    }
+
+    private IEnumerator AttackAnimation()
+    {
+        Vector3 startPosition = transform.position;
+
+        // プレイヤーの方向を計算
+        Vector3 direction =
+            new Vector3(
+                _player.GridPosition.x - _gridPosition.x,
+                0,
+                _player.GridPosition.y - _gridPosition.y
+            ).normalized;
+
+        // プレイヤーの方向を向く
+        transform.rotation = Quaternion.LookRotation(direction);
+
+        // 少し前に出る
+        Vector3 attackPosition =
+            startPosition + direction * 0.3f;
+
+        yield return transform
+            .DOMove(attackPosition, 0.1f)
+            .WaitForCompletion();
+
+        // ダメージ
         _player.Damage(_attack);
+
+        // 元の位置に戻る
+        yield return transform
+            .DOMove(startPosition, 0.1f)
+            .WaitForCompletion();
     }
 
     public void Damage(int damage)

@@ -5,19 +5,36 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    public int _width = 10;
-    public int _height = 10;
+    private int _width;
+    private int _height;
     private Cell[,] _cells;
     [SerializeField] GameObject _floorPrefab;
     [SerializeField] GameObject _wallPrefab;
     [SerializeField] GameObject _goalPrefab;
     [SerializeField] GameObject _playerPrefab;
     [SerializeField] GameObject _enemyPregfab;
-    [SerializeField]
     private string[] _mapData =
     {
-        "#####",
-        "#...#"
+     "####################",
+    "#P....#............#",
+    "#.##..#.#########..#",
+    "#....##........#...#",
+    "####.########..#.#.#",
+    "#....#....E...#.#..#",
+    "#.##.#.###.##.#.#..#",
+    "#E#..#.#....#.#....#",
+    "#.#.##.#.E..#..###.#",
+    "#.#....#..##.....#.#",
+    "#.######...#######.#",
+    "#.....E.....#......#",
+    "#.#########.#.####.#",
+    "#.#.......#.#.#....#",
+    "#.#.#####.#.#.#.##.#",
+    "#...#...#.#...#....#",
+    "###.#.#.#.#####.##.#",
+    "#E..#G#........#...#",
+    "#....#####.E.......#",
+    "####################"
     };
 
     private Vector2Int _playerSpawn;

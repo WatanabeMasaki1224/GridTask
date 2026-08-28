@@ -128,8 +128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47a04c0b92383ca4cbb8ff973d42154d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  _attack: 3
-  _HP: 10
+  _attack: 1
+  _HP: 6
 --- !u!1 &8404073210283781773
 GameObject:
   m_ObjectHideFlags: 0
