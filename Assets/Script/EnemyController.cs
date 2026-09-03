@@ -22,7 +22,7 @@ public class EnemyController : MonoBehaviour
     public void Initialize(Vector2Int startPos)
     {
         _gridPosition = startPos;
-        transform.position = new Vector3(startPos.x, 0, startPos.y);
+        transform.position = new Vector3(startPos.x, 2, startPos.y);
     }
 
     private void Start()
@@ -120,10 +120,21 @@ public class EnemyController : MonoBehaviour
         currentCell.Enemy = null;
 
 
+
         // ˆÚ“®æ‚É“G‚ğ“o˜^
         nextCell.Enemy = this;
         _gridPosition = nextPos;
-        transform.position = new Vector3(_gridPosition.x, 0, _gridPosition.y);
+        // ˆÚ“®‚µ‚½•ûŒü‚ğŒü‚­
+        Look(direction);
+        transform.position = new Vector3(_gridPosition.x, 2, _gridPosition.y);
+    }
+
+    private void Look(Vector2Int direction)
+    {
+        transform.rotation = Quaternion.LookRotation(
+            new Vector3(direction.x, 0, direction.y)
+        );
+
     }
 
     private void Attack()
@@ -183,6 +194,7 @@ public class EnemyController : MonoBehaviour
 
         cell.Enemy = null;
         _enemyManager.RemoveEnemy(this);
+        transform.DOKill();
         Destroy(gameObject);
     }
 }

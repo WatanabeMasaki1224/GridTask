@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     private Vector2Int _gridPosition;
     private Vector2Int _lookDirection = Vector2Int.down;
     private int _currentHP;
+    private bool _isAttacking;
     public Vector2Int GridPosition => _gridPosition;
 
     public void Initialize(Vector2Int startPos)
@@ -108,6 +109,12 @@ public class PlayerController : MonoBehaviour
 
     private void Attack()
     {
+        if (_isAttacking)
+        {
+            return;
+        }
+
+        _isAttacking = true;
         Vector2Int[] directions = {
         Vector2Int.up,
         Vector2Int.down,
@@ -170,6 +177,7 @@ public class PlayerController : MonoBehaviour
             .DOMove(startPosition, 0.1f)
             .WaitForCompletion();
 
+        _isAttacking = false;
         // アニメーションが終わってから次のターン
         _turnManager.ChangeTurn();
     }
@@ -188,6 +196,7 @@ public class PlayerController : MonoBehaviour
     {
         _turnManager.GameEnd();
         _gameManager.GameOver();
+        transform.DOKill();
         Destroy(gameObject);
     }
 }
