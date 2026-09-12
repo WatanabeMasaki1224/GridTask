@@ -90,6 +90,9 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ƒ}ƒbƒv¶¬
+    /// </summary>
     private void CreateMap()
     {
         for(int x = 0; x < _width; x++)

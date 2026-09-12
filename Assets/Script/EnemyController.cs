@@ -37,6 +37,7 @@ public class EnemyController : MonoBehaviour
 
     public void EnemyTurn()
     {
+        //マンハッタン距離（何マス離れているか）
         int distance =
         Mathf.Abs(_player.GridPosition.x - _gridPosition.x) +
         Mathf.Abs(_player.GridPosition.y - _gridPosition.y);
@@ -118,8 +119,6 @@ public class EnemyController : MonoBehaviour
         );
 
         currentCell.Enemy = null;
-
-
 
         // 移動先に敵を登録
         nextCell.Enemy = this;

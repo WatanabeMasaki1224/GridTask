@@ -21,6 +21,10 @@ public class TurnManager : MonoBehaviour
         _gameUI.SetTurn(TurnCount);
     }
 
+    /// <summary>
+    /// プレイヤーのターン出るかの判定
+    /// </summary>
+    /// <returns></returns>
     public bool PlayerTurn()
     {
         return !_gameEnded && CurrentTurn == TurnState.Player;
@@ -31,6 +35,9 @@ public class TurnManager : MonoBehaviour
         return !_gameEnded && CurrentTurn == TurnState.Enemy;
     }
 
+    /// <summary>
+    /// ターンの切り替え
+    /// </summary>
     public void ChangeTurn()
     {
         if (_gameEnded)

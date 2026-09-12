@@ -61,7 +61,7 @@ public class PathFinder
                 }
 
                 // 他の敵がいる場所は通れない
-                if (cell.Enemy != null && next != goal)
+                if (cell.Enemy != null)
                 {
                     continue;
                 }
@@ -74,10 +74,13 @@ public class PathFinder
         return null;
     }
 
+    //動くルートを決める
     private List<Vector2Int> CreatePath(Dictionary<Vector2Int, Vector2Int> previous,Vector2Int start,Vector2Int goal)
     {
         List<Vector2Int> path = new List<Vector2Int>();
+  　　　//現在地をゴールに設定
         Vector2Int current = goal;
+        //スタート地点まで繰り返す
         while (current != start)
         {
             path.Add(current);
